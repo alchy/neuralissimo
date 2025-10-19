@@ -1,0 +1,88 @@
+# Configuration file for Electric Piano Neural Network
+
+# Dataset settings
+data:
+  instrument_dir: "C:\\SoundBanks\\IthacaPlayer\\instrument"
+  sample_rate: 48000  # Target sample rate (48 kHz)
+  audio_length: 3.0   # Target audio length in seconds
+  train_split: 0.8
+  val_split: 0.1
+  test_split: 0.1
+
+# Model architecture settings
+model:
+  type: "gan"  # Options: "vae", "gan", "diffusion"
+  latent_dim: 128  # Reduced for GAN (faster training)
+  hidden_dims: [128, 256, 512, 1024]
+
+  # Conditional inputs
+  midi_note_range: [33, 94]  # Min and max MIDI notes
+  velocity_levels: 8
+
+  # Audio representation
+  use_mel_spectrogram: true
+  n_fft: 2048
+  hop_length: 512
+  n_mels: 128
+
+  # GAN-specific settings
+  gan:
+    generator_base_channels: 256
+    discriminator_base_channels: 64
+    use_spectral_norm: true
+    num_res_blocks: 3
+
+# Training settings
+training:
+  batch_size: 8  # Batch size for variable-length GAN
+  num_epochs: 200  # Production: 200 epochs for best quality
+  learning_rate: 0.0002  # Standard for GANs (VAE setting)
+  weight_decay: 0.0001
+
+  # GAN-specific learning rates
+  generator_lr: 0.0002
+  discriminator_lr: 0.0002
+
+  # Loss weights (for VAE)
+  reconstruction_weight: 1.0
+  kl_weight: 0.001
+
+  # GAN loss settings
+  gan_loss_type: "hinge"  # Options: "hinge", "bce", "wgan"
+
+  # Optimization
+  optimizer: "adam"
+  scheduler: "reduce_on_plateau"
+  patience: 15
+
+  # Checkpointing
+  save_every: 10  # Save checkpoint every 10 epochs
+  checkpoint_dir: "checkpoints"
+
+  # Logging
+  log_every: 50  # Log to TensorBoard every 50 batches
+  tensorboard_dir: "logs"
+
+# Inference settings
+inference:
+  output_dir: "outputs"
+  output_sample_rate: 48000  # Can be 44100 or 48000
+  output_bit_depth: 16
+
+  # Vocoder settings
+  vocoder_type: "hifigan"  # Options: "griffin_lim", "hifigan"
+  griffin_lim_iterations: 300  # If using Griffin-Lim
+
+  # HiFi-GAN vocoder checkpoint (optional)
+  hifigan_checkpoint: null  # Path to pre-trained HiFi-GAN model
+
+  # Generation settings
+  default_temperature: 1.0
+  use_variable_length: true
+
+# Spectral Style Transfer settings (for MP3 reference)
+style_transfer:
+  enabled: false  # Enable for style transfer from reference track
+  reference_track: null  # Path to MP3/WAV reference track
+  spectral_loss_weight: 1.0  # Weight for spectral matching loss
+  perceptual_loss_weight: 0.5  # Weight for perceptual loss

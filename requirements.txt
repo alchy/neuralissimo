@@ -1,0 +1,24 @@
+# Neuralissimo - Variable-Length GAN for Piano Sound Generation
+# Python 3.8+ required
+
+# Core ML frameworks
+torch>=2.0.0
+torchaudio>=2.0.0
+
+# Audio processing
+soundfile>=0.12.0
+scipy>=1.10.0
+
+# Data handling
+numpy>=1.24.0
+
+# Training and monitoring
+tqdm>=4.65.0
+tensorboard>=2.13.0
+
+# Configuration
+pyyaml>=6.0
+
+# Optional dependencies
+# matplotlib>=3.7.0  # For duration analysis plots
+# librosa>=0.10.0    # Alternative audio processing (not required)
